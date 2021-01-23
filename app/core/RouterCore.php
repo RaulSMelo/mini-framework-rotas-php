@@ -4,6 +4,8 @@
 namespace App\core;
 
 
+use App\controller\MessageController;
+
 class RouterCore
 {
     private $uri;
@@ -20,6 +22,7 @@ class RouterCore
 
     private function initialize()
     {
+
         $this->method = $_SERVER["REQUEST_METHOD"];
         $uri = $_SERVER["REQUEST_URI"];
 
@@ -31,13 +34,13 @@ class RouterCore
 
         $uri = $this->normalizeURI($ex);
 
+
         for ($i = 0; $i < UNSET_URI_COUNT; $i++){
             unset($uri[$i]);
         }
 
         $this->uri = implode("/",$this->normalizeURI($uri));
 
-        if(DEBUG_URI) dd($this->uri);
     }
 
     private function normalizeURI($arr)
@@ -51,6 +54,7 @@ class RouterCore
             "router" => $router,
             "call"   => $call
         ];
+
     }
 
     private function post($router, $call)
@@ -77,8 +81,12 @@ class RouterCore
 
     private function executeGet()
     {
+        $cont = 0;
+
         foreach ($this->getArr as $get){
+
             $r = substr($get["router"], 1);
+
 
             if(substr($r, -1) == "/"){
                 $r = substr($r,0, -1);
@@ -90,10 +98,17 @@ class RouterCore
                     return;
                 }
 
+                $cont++;
+
                 $this->executeController($get["call"]);
 
             }
 
+        }
+
+        if($cont == 0){
+            (new MessageController())->message("Dados inválidos", "Verifique se a URL está digitada corretamente", 404);
+            return;
         }
 
     }
@@ -123,22 +138,24 @@ class RouterCore
 
     private function executeController($get)
     {
+
         $ex = explode("@", $get);
 
+
         if(!isset($ex[0]) || !isset($ex[1])){
-            (new \App\controller\MessageController())->message("Dados inválidos", "Controller ou método não encontrado: " . $get, 404);
+            (new \App\Controller\MessageController())->message("Dados inválidos", "Controller ou método não encontrado: " . $get, 404);
             return;
         }
 
         $cont = "App\\controller\\" . $ex[0];
 
         if(!class_exists($cont)){
-            (new \App\controller\MessageController())->message("Dados inválidos", "Controller não encontrado: " . $get, 404);
+            (new \App\Controller\MessageController())->message("Dados inválidos", "Controller não encontrado: " . $get, 404);
             return;
         }
 
         if(!method_exists($cont, $ex[1])){
-            (new \App\controller\MessageController())->message("Dados inválidos", "Método não encontrado: " . $get, 404);
+            (new \App\Controller\MessageController())->message("Dados inválidos", "Método não encontrado: " . $get, 404);
             return;
         }
 

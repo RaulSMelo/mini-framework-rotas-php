@@ -1,0 +1,27 @@
+:root{
+    --bg-pattern: #e1e8f0;
+}
+
+body{
+    background-color: var(--bg-pattern);
+    box-sizing: border-box !important;
+}
+
+.center-screen{
+    margin:  0 auto;
+ }
+.max-width{
+    max-width: 1024px;
+    width: 100%;
+}
+
+.navbar-nav{
+    margin:  0 auto;
+}
+ .bg-white{
+     background-color: #ffffff;
+ }
+
+ .padding{
+     padding: 10px;
+ }

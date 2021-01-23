@@ -6,7 +6,9 @@
   "authors": [
     {
       "name": "Raul Melo",
-      "email": "raul.melo0901@gmail.com"
+      "email": "raul.melo0901@gmail.com",
+      "role": "developer",
+      "homepage": "http://www.mini-framework-rotas-php.com.br"
     }
   ],
   "autoload": {
